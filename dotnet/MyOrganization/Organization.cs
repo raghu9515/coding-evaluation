@@ -27,6 +27,36 @@ namespace MyOrganization
         public Position? Hire(Name person, string title)
         {
             //your code here
+
+            Position? newPostion = GetPosition(title, root);
+            if (newPostion != null)
+            {
+                newPostion.SetEmployee(new Employee(Counter.NextNumber, person));
+            }
+            
+            return newPostion;
+        }
+
+        public Position? GetPosition(string title, Position position)
+        {
+            if (title.Equals(position.GetTitle(), StringComparison.OrdinalIgnoreCase) && !position.IsFilled())
+            {
+                return position;
+
+            }
+
+            if (position.GetDirectReports().Count > 0)
+            {
+                foreach (Position p in position.GetDirectReports())
+                {
+                    Position np = GetPosition(title, p);
+                    if (np != null)
+                    {
+                        return np;
+                    }
+                }
+            }
+
             return null;
         }
 
